@@ -1,0 +1,18 @@
+{
+  "title": "Travel & Landscape",
+  "category": "travel",
+  "description": "Personal work from the road — available as fine-art prints.",
+  "date": "2026-04-01",
+  "featured": true,
+  "order": 2,
+  "cover": "../../assets/placeholders/cover-travel.jpg",
+  "coverAlt": "REPLACE — travel cover image",
+  "photos": [
+    { "src": "../../assets/placeholders/travel-1.jpg", "alt": "REPLACE — describe this scene", "caption": "Somewhere north" },
+    { "src": "../../assets/placeholders/travel-2.jpg", "alt": "REPLACE — describe this scene" },
+    { "src": "../../assets/placeholders/travel-3.jpg", "alt": "REPLACE — describe this scene" },
+    { "src": "../../assets/placeholders/travel-4.jpg", "alt": "REPLACE — describe this scene", "caption": "First light" },
+    { "src": "../../assets/placeholders/travel-5.jpg", "alt": "REPLACE — describe this scene" },
+    { "src": "../../assets/placeholders/travel-6.jpg", "alt": "REPLACE — describe this scene" }
+  ]
+}

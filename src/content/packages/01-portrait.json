@@ -1,0 +1,15 @@
+{
+  "name": "The Portrait Session",
+  "startingPrice": "$350",
+  "tagline": "Perfect for individuals, couples, and personal branding.",
+  "inclusions": [
+    "60-minute session, one location",
+    "Relaxed, guided direction throughout",
+    "25+ hand-edited high-resolution images",
+    "Private online gallery for downloads",
+    "Print-ready files included"
+  ],
+  "popular": false,
+  "ctaLabel": "Book a portrait session",
+  "order": 1
+}

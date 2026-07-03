@@ -1,0 +1,18 @@
+{
+  "title": "Portraits",
+  "category": "portraits",
+  "description": "Relaxed, natural sessions — couples, families, and individuals.",
+  "date": "2026-05-01",
+  "featured": true,
+  "order": 1,
+  "cover": "../../assets/placeholders/cover-portraits.jpg",
+  "coverAlt": "REPLACE — portrait cover image",
+  "photos": [
+    { "src": "../../assets/placeholders/portrait-1.jpg", "alt": "REPLACE — describe this portrait", "caption": "Golden hour, downtown" },
+    { "src": "../../assets/placeholders/portrait-2.jpg", "alt": "REPLACE — describe this portrait" },
+    { "src": "../../assets/placeholders/portrait-3.jpg", "alt": "REPLACE — describe this portrait", "caption": "Studio session" },
+    { "src": "../../assets/placeholders/portrait-4.jpg", "alt": "REPLACE — describe this portrait" },
+    { "src": "../../assets/placeholders/portrait-5.jpg", "alt": "REPLACE — describe this portrait" },
+    { "src": "../../assets/placeholders/portrait-6.jpg", "alt": "REPLACE — describe this portrait" }
+  ]
+}
