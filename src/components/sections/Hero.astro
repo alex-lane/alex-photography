@@ -1,0 +1,41 @@
+---
+import ResponsiveImage from "../gallery/ResponsiveImage.astro";
+import Button from "../ui/Button.astro";
+import Container from "../ui/Container.astro";
+import { site } from "../../config/site";
+import heroImg from "../../assets/placeholders/hero.jpg";
+---
+
+<section class="relative flex min-h-[92svh] items-end overflow-hidden">
+  <ResponsiveImage
+    src={heroImg}
+    alt=""
+    class="absolute inset-0 h-full w-full"
+    sizes="100vw"
+    widths={[768, 1280, 1920, 2400]}
+    loading="eager"
+    fetchpriority="high"
+  />
+  <div class="scrim pointer-events-none absolute inset-0"></div>
+
+  <Container class="relative z-10 pb-16 md:pb-24">
+    <div class="max-w-3xl">
+      <p class="text-bone/85 text-xs font-medium uppercase tracking-[0.24em]">
+        {site.hero.kicker}
+      </p>
+      <h1 class="text-bone mt-4 whitespace-pre-line text-hero font-normal">
+        {site.hero.headline}
+      </h1>
+      <p class="text-bone/85 mt-6 max-w-xl text-lg leading-relaxed">
+        {site.hero.sub}
+      </p>
+      <div class="mt-9 flex flex-wrap gap-4">
+        <Button href="/contact" size="lg">{site.primaryCta}</Button>
+        <Button href="/galleries/portraits" size="lg" variant="outline" class="!text-bone !border-bone/40 hover:!bg-bone hover:!text-ink">
+          View the work
+        </Button>
+      </div>
+      <p class="text-bone/70 mt-8 text-sm">{site.serviceArea}</p>
+    </div>
+  </Container>
+</section>

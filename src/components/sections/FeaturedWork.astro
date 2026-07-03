@@ -1,0 +1,43 @@
+---
+import Container from "../ui/Container.astro";
+import SectionHeading from "../ui/SectionHeading.astro";
+import ResponsiveImage from "../gallery/ResponsiveImage.astro";
+import { getFeaturedPhotos } from "../../lib/content";
+
+const photos = await getFeaturedPhotos(6);
+---
+
+{
+  photos.length > 0 && (
+    <section id="work" class="py-[var(--spacing-section)]">
+      <Container>
+        <div class="flex flex-wrap items-end justify-between gap-6" data-reveal>
+          <SectionHeading kicker="Selected work" title="A look through the lens." />
+          <a href="/galleries/portraits" class="text-accent-deep hover:text-ink text-sm font-medium underline-offset-4 hover:underline">
+            View all galleries →
+          </a>
+        </div>
+
+        <div class="mt-12 grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4">
+          {photos.map((photo, i) => (
+            <a
+              href={photo.href}
+              class="work-tile group relative overflow-hidden"
+              data-reveal
+              style={`--d:${i * 60}ms`}
+            >
+              <ResponsiveImage
+                src={photo.src}
+                alt={photo.alt}
+                aspect={photo.category === "portraits" ? "3 / 4" : "4 / 3"}
+                sizes="(min-width: 768px) 33vw, 50vw"
+                widths={[400, 700, 1000]}
+                class="h-full w-full transition-transform duration-700 ease-[var(--ease-out-soft)] group-hover:scale-[1.04]"
+              />
+            </a>
+          ))}
+        </div>
+      </Container>
+    </section>
+  )
+}

@@ -1,0 +1,38 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Nav from "../../components/layout/Nav.astro";
+import Footer from "../../components/layout/Footer.astro";
+import Container from "../../components/ui/Container.astro";
+import SectionHeading from "../../components/ui/SectionHeading.astro";
+import CategoryCard from "../../components/gallery/CategoryCard.astro";
+import { getGalleries } from "../../lib/content";
+
+const galleries = await getGalleries();
+---
+
+<BaseLayout
+  title="Galleries"
+  description="Portrait sessions and travel work — browse the full collections."
+>
+  <Nav slot="header" />
+
+  <Container class="pt-28 pb-[var(--spacing-section)] md:pt-36">
+    <SectionHeading kicker="The work" title="Galleries." />
+    <div class="mt-12 grid gap-4 md:grid-cols-2">
+      {
+        galleries.map((g) => (
+          <CategoryCard
+            href={`/galleries/${g.data.category}`}
+            title={g.data.title}
+            description={g.data.description}
+            count={g.data.photos.length}
+            cover={g.data.cover}
+            coverAlt={g.data.coverAlt}
+          />
+        ))
+      }
+    </div>
+  </Container>
+
+  <Footer slot="footer" />
+</BaseLayout>

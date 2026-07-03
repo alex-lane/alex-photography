@@ -1,0 +1,50 @@
+---
+import { getImage } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import ResponsiveImage from "./ResponsiveImage.astro";
+import Lightbox from "./Lightbox.astro";
+
+interface Photo {
+  src: ImageMetadata;
+  alt: string;
+  caption?: string;
+}
+interface Props {
+  photos: Photo[];
+}
+const { photos } = Astro.props;
+
+// A larger optimized source for the lightbox (thumbnails stay small in the grid).
+const withFull = await Promise.all(
+  photos.map(async (p) => ({
+    ...p,
+    full: (await getImage({ src: p.src, width: 1800, format: "webp", quality: 82 })).src,
+  })),
+);
+---
+
+<div class="columns-1 gap-4 sm:columns-2 lg:columns-3">
+  {
+    withFull.map((p) => (
+      <button
+        type="button"
+        class="group mb-4 block w-full break-inside-avoid overflow-hidden"
+        data-lightbox-item
+        data-full={p.full}
+        data-alt={p.alt}
+        data-caption={p.caption ?? ""}
+        aria-label={`Open photo: ${p.alt}`}
+      >
+        <ResponsiveImage
+          src={p.src}
+          alt={p.alt}
+          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+          widths={[400, 700, 1000]}
+          class="w-full transition-transform duration-700 ease-[var(--ease-out-soft)] group-hover:scale-[1.03]"
+        />
+      </button>
+    ))
+  }
+</div>
+
+<Lightbox />

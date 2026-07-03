@@ -1,0 +1,39 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Nav from "../components/layout/Nav.astro";
+import Footer from "../components/layout/Footer.astro";
+import Container from "../components/ui/Container.astro";
+import Button from "../components/ui/Button.astro";
+import { site } from "../config/site";
+---
+
+<BaseLayout
+  title="Thank you"
+  description="Your inquiry is on its way."
+  noindex
+>
+  <Nav slot="header" />
+
+  <Container class="flex min-h-[70svh] flex-col items-center justify-center pt-28 pb-[var(--spacing-section)] text-center md:pt-36">
+    <p class="text-accent-deep text-xs font-medium uppercase tracking-[0.22em]">
+      Inquiry received
+    </p>
+    <h1 class="mt-4 text-4xl md:text-6xl">Thank you.</h1>
+    <p class="text-ink-soft mt-6 max-w-md text-lg leading-relaxed">
+      Your message is on its way to my inbox. {site.responseTime} In the meantime,
+      have a look around.
+    </p>
+    <div class="mt-9 flex flex-wrap justify-center gap-4">
+      <Button href="/galleries/portraits" size="lg">Browse the galleries</Button>
+      {
+        site.social.instagram && (
+          <Button href={site.social.instagram} size="lg" variant="outline">
+            Follow along on Instagram
+          </Button>
+        )
+      }
+    </div>
+  </Container>
+
+  <Footer slot="footer" />
+</BaseLayout>

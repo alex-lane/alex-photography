@@ -1,0 +1,21 @@
+# build output
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# cloudflare / wrangler
+.wrangler/
+.dev.vars
+
+# env & secrets
+.env
+.env.*
+!.env.example
+
+# logs & os
+*.log
+.DS_Store
+Thumbs.db
+.gstack/

@@ -1,0 +1,48 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Nav from "../components/layout/Nav.astro";
+import Footer from "../components/layout/Footer.astro";
+import Container from "../components/ui/Container.astro";
+import Button from "../components/ui/Button.astro";
+import ResponsiveImage from "../components/gallery/ResponsiveImage.astro";
+import { site } from "../config/site";
+import headshot from "../assets/placeholders/headshot.jpg";
+---
+
+<BaseLayout
+  title="About"
+  description={`About ${site.brand} — ${site.positioning}`}
+>
+  <Nav slot="header" />
+
+  <Container class="grid items-center gap-12 pt-28 pb-[var(--spacing-section)] md:grid-cols-2 md:gap-16 md:pt-36">
+    <div data-reveal>
+      <ResponsiveImage
+        src={headshot}
+        alt="REPLACE — a friendly headshot of you"
+        aspect="4 / 5"
+        sizes="(min-width: 768px) 45vw, 100vw"
+        widths={[500, 800, 1100]}
+      />
+    </div>
+
+    <div data-reveal>
+      <p class="text-accent-deep text-xs font-medium uppercase tracking-[0.22em]">
+        About
+      </p>
+      <h1 class="mt-4 text-4xl md:text-5xl">{site.about.headline}</h1>
+      <div class="text-ink-soft mt-6 flex flex-col gap-4 text-lg leading-relaxed">
+        {site.about.body.map((p) => <p>{p}</p>)}
+      </div>
+      <p class="text-ink-faint mt-6 text-sm">{site.serviceArea}</p>
+      <div class="mt-8 flex flex-wrap gap-4">
+        <Button href="/contact" size="lg">{site.primaryCta}</Button>
+        <Button href="/galleries/portraits" size="lg" variant="outline">
+          See the work
+        </Button>
+      </div>
+    </div>
+  </Container>
+
+  <Footer slot="footer" />
+</BaseLayout>

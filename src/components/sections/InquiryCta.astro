@@ -1,0 +1,31 @@
+---
+import Container from "../ui/Container.astro";
+import ContactForm from "./ContactForm.astro";
+import { site } from "../../config/site";
+---
+
+<section id="inquire" class="bg-ink text-bone py-[var(--spacing-section)]">
+  <Container class="grid gap-12 lg:grid-cols-2 lg:gap-16">
+    <div class="lg:pt-4" data-reveal>
+      <p class="text-accent text-xs font-medium uppercase tracking-[0.24em]">
+        Let's make something
+      </p>
+      <h2 class="text-bone mt-4 text-4xl md:text-5xl">Ready when you are.</h2>
+      <p class="text-bone/70 mt-6 max-w-md text-lg leading-relaxed">
+        Tell me a little about what you're after and I'll get back to you with
+        availability and the next steps.
+      </p>
+      <p class="text-bone/60 mt-8 text-sm">{site.responseTime}</p>
+      <p class="text-bone/60 mt-1 text-sm">
+        Prefer email?
+        <a href={`mailto:${site.email}`} class="text-bone underline underline-offset-4">
+          {site.email}
+        </a>
+      </p>
+    </div>
+
+    <div class="bg-bone text-ink p-6 sm:p-8" data-reveal>
+      <ContactForm compact />
+    </div>
+  </Container>
+</section>

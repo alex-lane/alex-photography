@@ -1,0 +1,123 @@
+---
+import { ClientRouter } from "astro:transitions";
+import "@fontsource-variable/fraunces";
+import "@fontsource-variable/inter";
+import "../styles/global.css";
+import { site } from "../config/site";
+
+interface Props {
+  title: string;
+  description?: string;
+  /** Absolute or root-relative path to a social share image. */
+  ogImage?: string;
+  /** Set true on pages that should not be indexed (e.g. /thank-you). */
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = "Portrait and travel photography — booking sessions now.",
+  ogImage = "/og-default.jpg",
+  noindex = false,
+} = Astro.props;
+
+const siteName = site.brand;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImageUrl = new URL(ogImage, Astro.site).href;
+const fullTitle = title === siteName ? title : `${title} — ${siteName}`;
+
+// Cloudflare Web Analytics — set PUBLIC_CF_BEACON_TOKEN to enable (free, no cookies).
+const beaconToken = import.meta.env.PUBLIC_CF_BEACON_TOKEN;
+
+// Structured data helps local search (portrait bookings start there).
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "@id": new URL("/", Astro.site).href,
+  name: siteName,
+  description: site.positioning,
+  url: new URL("/", Astro.site).href,
+  email: site.email,
+  image: ogImageUrl,
+  ...(site.social.instagram ? { sameAs: [site.social.instagram] } : {}),
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Mark JS available so scroll-reveal only hides content when it can reveal it. -->
+    <script is:inline>
+      document.documentElement.classList.add("js");
+    </script>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="canonical" href={canonical} />
+
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify(jsonLd)}
+    />
+
+    {
+      beaconToken && (
+        <script
+          is:inline
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon={`{"token": "${beaconToken}"}`}
+        />
+      )
+    }
+
+    <ClientRouter />
+  </head>
+  <body>
+    <a href="#main" class="skip-link bg-ink text-bone px-4 py-2 text-sm">
+      Skip to content
+    </a>
+    <slot name="header" />
+    <main id="main">
+      <slot />
+    </main>
+    <slot name="footer" />
+
+    <script>
+      function initReveal() {
+        const els = document.querySelectorAll<HTMLElement>("[data-reveal]");
+        if (!("IntersectionObserver" in window)) {
+          els.forEach((el) => el.classList.add("is-visible"));
+          return;
+        }
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-visible");
+                io.unobserve(entry.target);
+              }
+            }
+          },
+          { rootMargin: "0px 0px -10% 0px", threshold: 0.1 },
+        );
+        els.forEach((el) => io.observe(el));
+      }
+      document.addEventListener("astro:page-load", initReveal);
+    </script>
+  </body>
+</html>

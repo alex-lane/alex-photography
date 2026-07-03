@@ -1,0 +1,100 @@
+---
+import Container from "../ui/Container.astro";
+import SectionHeading from "../ui/SectionHeading.astro";
+import { getPackages } from "../../lib/content";
+
+const items = await getPackages();
+const count = items.length;
+const gridClass =
+  count === 1
+    ? "max-w-md mx-auto"
+    : count === 2
+      ? "grid gap-6 sm:grid-cols-2 max-w-3xl mx-auto"
+      : "grid gap-6 lg:grid-cols-3";
+---
+
+{
+  count > 0 && (
+    <section id="pricing" class="py-[var(--spacing-section)]">
+      <Container>
+        <SectionHeading
+          kicker="Investment"
+          title="Simple sessions, clear pricing."
+          align="center"
+          class="mx-auto"
+        />
+        <p class="text-ink-soft mx-auto mt-4 max-w-xl text-center">
+          Every session includes hand-editing and a private gallery. Custom
+          packages are always welcome — just ask.
+        </p>
+
+        <div class:list={["mt-12 items-start", gridClass]}>
+          {items.map((p) => (
+            <div
+              class:list={[
+                "relative flex flex-col border p-8",
+                p.data.popular
+                  ? "border-ink bg-ink text-bone shadow-xl"
+                  : "border-line bg-bone",
+              ]}
+              data-reveal
+            >
+              {p.data.popular && (
+                <span class="bg-accent text-bone absolute -top-3 left-8 px-3 py-1 text-xs font-medium uppercase tracking-wider">
+                  Most loved
+                </span>
+              )}
+              <h3 class="font-display text-2xl">{p.data.name}</h3>
+              {p.data.tagline && (
+                <p
+                  class:list={[
+                    "mt-2 text-sm",
+                    p.data.popular ? "text-bone/70" : "text-ink-faint",
+                  ]}
+                >
+                  {p.data.tagline}
+                </p>
+              )}
+              <p class="mt-5">
+                <span
+                  class:list={["text-sm", p.data.popular ? "text-bone/60" : "text-ink-faint"]}
+                >
+                  Starting at
+                </span>
+                <span class="font-display ml-1 text-3xl">{p.data.startingPrice}</span>
+              </p>
+
+              <ul
+                class:list={[
+                  "mt-6 flex flex-1 flex-col gap-2.5 text-sm",
+                  p.data.popular ? "text-bone/85" : "text-ink-soft",
+                ]}
+              >
+                {p.data.inclusions.map((inc) => (
+                  <li class="flex gap-2.5">
+                    <span class:list={[p.data.popular ? "text-accent" : "text-accent-deep"]}>
+                      —
+                    </span>
+                    <span>{inc}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <a
+                href="/contact"
+                class:list={[
+                  "mt-8 inline-flex items-center justify-center px-6 py-3 text-sm font-medium transition-colors",
+                  p.data.popular
+                    ? "bg-bone text-ink hover:bg-accent hover:text-bone"
+                    : "bg-ink text-bone hover:bg-accent-deep",
+                ]}
+              >
+                {p.data.ctaLabel}
+              </a>
+            </div>
+          ))}
+        </div>
+      </Container>
+    </section>
+  )
+}
