@@ -1,0 +1,62 @@
+---
+import { ClientRouter } from "astro:transitions";
+import "@fontsource-variable/fraunces";
+import "@fontsource-variable/inter";
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description?: string;
+  /** Absolute or root-relative path to a social share image. */
+  ogImage?: string;
+  /** Set true on pages that should not be indexed (e.g. /thank-you). */
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = "Portrait and travel photography — booking sessions now.",
+  ogImage = "/og-default.jpg",
+  noindex = false,
+} = Astro.props;
+
+const siteName = "Alex Lane Photography"; // TODO: your brand name
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImageUrl = new URL(ogImage, Astro.site).href;
+const fullTitle = title === siteName ? title : `${title} — ${siteName}`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="canonical" href={canonical} />
+
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <ClientRouter />
+  </head>
+  <body>
+    <a href="#main" class="skip-link bg-ink text-bone px-4 py-2 text-sm">
+      Skip to content
+    </a>
+    <slot name="header" />
+    <main id="main">
+      <slot />
+    </main>
+    <slot name="footer" />
+  </body>
+</html>
