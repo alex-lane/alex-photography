@@ -1,0 +1,15 @@
+---
+interface Props {
+  class?: string;
+  /** Wider variant for full-bleed galleries. */
+  wide?: boolean;
+  as?: keyof HTMLElementTagNameMap;
+}
+const { class: className = "", wide = false, as = "div" } = Astro.props;
+const Tag = as;
+const max = wide ? "max-w-[100rem]" : "max-w-6xl";
+---
+
+<Tag class:list={["mx-auto w-full px-6 sm:px-8", max, className]}>
+  <slot />
+</Tag>
