@@ -1,0 +1,10 @@
+name = "alex-photography"
+compatibility_date = "2024-11-01"
+pages_build_output_dir = "dist"
+
+# Durable inquiry log. Create the namespace once, then paste its id here:
+#   wrangler kv namespace create INQUIRIES
+# For local `wrangler pages dev`, Miniflare provides a local KV automatically.
+[[kv_namespaces]]
+binding = "INQUIRIES"
+id = "REPLACE_WITH_YOUR_KV_NAMESPACE_ID"
