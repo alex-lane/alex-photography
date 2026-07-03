@@ -1,0 +1,52 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Nav from "../components/layout/Nav.astro";
+import Footer from "../components/layout/Footer.astro";
+import Container from "../components/ui/Container.astro";
+import ContactForm from "../components/sections/ContactForm.astro";
+import { site } from "../config/site";
+---
+
+<BaseLayout
+  title="Contact"
+  description="Get in touch to book a portrait session or ask about availability."
+>
+  <Nav slot="header" />
+
+  <Container class="grid gap-12 pt-28 pb-[var(--spacing-section)] md:grid-cols-[0.8fr_1.2fr] md:gap-16 md:pt-36">
+    <div data-reveal>
+      <p class="text-accent-deep text-xs font-medium uppercase tracking-[0.22em]">
+        Get in touch
+      </p>
+      <h1 class="mt-4 text-4xl md:text-5xl">Let's book your session.</h1>
+      <p class="text-ink-soft mt-6 max-w-md text-lg leading-relaxed">
+        Tell me what you have in mind and I'll come back with availability,
+        pricing, and everything you need to know.
+      </p>
+      <dl class="text-ink-soft mt-8 flex flex-col gap-3 text-sm">
+        <div>
+          <dt class="text-ink-faint">Email</dt>
+          <dd>
+            <a href={`mailto:${site.email}`} class="underline underline-offset-4">
+              {site.email}
+            </a>
+          </dd>
+        </div>
+        <div>
+          <dt class="text-ink-faint">Where</dt>
+          <dd>{site.serviceArea}</dd>
+        </div>
+        <div>
+          <dt class="text-ink-faint">Response time</dt>
+          <dd>{site.responseTime}</dd>
+        </div>
+      </dl>
+    </div>
+
+    <div data-reveal>
+      <ContactForm />
+    </div>
+  </Container>
+
+  <Footer slot="footer" />
+</BaseLayout>
