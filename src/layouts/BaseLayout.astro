@@ -3,6 +3,7 @@ import { ClientRouter } from "astro:transitions";
 import "@fontsource-variable/fraunces";
 import "@fontsource-variable/inter";
 import "../styles/global.css";
+import { site } from "../config/site";
 
 interface Props {
   title: string;
@@ -20,10 +21,26 @@ const {
   noindex = false,
 } = Astro.props;
 
-const siteName = "Alex Lane Photography"; // TODO: your brand name
+const siteName = site.brand;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogImageUrl = new URL(ogImage, Astro.site).href;
 const fullTitle = title === siteName ? title : `${title} — ${siteName}`;
+
+// Cloudflare Web Analytics — set PUBLIC_CF_BEACON_TOKEN to enable (free, no cookies).
+const beaconToken = import.meta.env.PUBLIC_CF_BEACON_TOKEN;
+
+// Structured data helps local search (portrait bookings start there).
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "@id": new URL("/", Astro.site).href,
+  name: siteName,
+  description: site.positioning,
+  url: new URL("/", Astro.site).href,
+  email: site.email,
+  image: ogImageUrl,
+  ...(site.social.instagram ? { sameAs: [site.social.instagram] } : {}),
+};
 ---
 
 <!doctype html>
@@ -46,6 +63,22 @@ const fullTitle = title === siteName ? title : `${title} — ${siteName}`;
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImageUrl} />
     <meta name="twitter:card" content="summary_large_image" />
+
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(jsonLd)}
+    />
+
+    {
+      beaconToken && (
+        <script
+          is:inline
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon={`{"token": "${beaconToken}"}`}
+        />
+      )
+    }
 
     <ClientRouter />
   </head>
