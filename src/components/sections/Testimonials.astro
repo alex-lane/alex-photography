@@ -1,0 +1,72 @@
+---
+import { Image } from "astro:assets";
+import Container from "../ui/Container.astro";
+import SectionHeading from "../ui/SectionHeading.astro";
+import { getTestimonials } from "../../lib/content";
+
+const items = await getTestimonials();
+const count = items.length;
+
+// Sparse-data layout: one big quote reads as intentional; a lonely card in a
+// 3-up grid reads as broken.
+const gridClass =
+  count === 1
+    ? "max-w-3xl mx-auto"
+    : count === 2
+      ? "grid gap-6 sm:grid-cols-2 max-w-4xl mx-auto"
+      : "grid gap-6 md:grid-cols-3";
+---
+
+{
+  count > 0 && (
+    <section class="bg-bone-deep py-[var(--spacing-section)]">
+      <Container>
+        <SectionHeading
+          kicker="Kind words"
+          title="People I've had the privilege to photograph."
+          align="center"
+          class="mx-auto"
+        />
+
+        <div class:list={["mt-12", gridClass]}>
+          {items.map((t) => (
+            <figure
+              class:list={[
+                "bg-bone border-line flex flex-col border p-7",
+                count === 1 && "items-center text-center p-10",
+              ]}
+              data-reveal
+            >
+              <blockquote
+                class:list={[
+                  "text-ink-soft leading-relaxed",
+                  count === 1 ? "text-2xl font-display text-ink" : "text-lg",
+                ]}
+              >
+                “{t.data.quote}”
+              </blockquote>
+              <figcaption class="mt-6 flex items-center gap-3">
+                {t.data.avatar && (
+                  <Image
+                    src={t.data.avatar}
+                    alt=""
+                    width={48}
+                    height={48}
+                    class="border-line h-12 w-12 rounded-full border object-cover"
+                  />
+                )}
+                <div>
+                  <p class="font-medium">{t.data.name}</p>
+                  <p class="text-ink-faint text-sm">{t.data.detail}</p>
+                </div>
+              </figcaption>
+              {t.data.result && (
+                <p class="text-accent-deep mt-4 text-sm font-medium">{t.data.result}</p>
+              )}
+            </figure>
+          ))}
+        </div>
+      </Container>
+    </section>
+  )
+}

@@ -1,0 +1,135 @@
+---
+import { site } from "../../config/site";
+
+interface Props {
+  /** Compact = home CTA (fewer fields); full = /contact page. */
+  compact?: boolean;
+  class?: string;
+}
+const { compact = false, class: className = "" } = Astro.props;
+
+// Cloudflare Turnstile test key ("always passes") is the safe default so the
+// form works locally and in preview. Set PUBLIC_TURNSTILE_SITE_KEY for prod.
+const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? "1x00000000000000000000AA";
+
+const sessionTypes = [
+  "Portrait session",
+  "Family session",
+  "Couples session",
+  "Brand / commercial",
+  "Travel prints",
+  "Something else",
+];
+---
+
+<form
+  class:list={["contact-form flex flex-col gap-4", className]}
+  action="/api/contact"
+  method="POST"
+  novalidate
+>
+  <!-- Honeypot: humans never fill this. -->
+  <div class="hidden" aria-hidden="true">
+    <label>Company<input type="text" name="company" tabindex="-1" autocomplete="off" /></label>
+  </div>
+  <input type="hidden" name="started_at" value="" />
+
+  <div class="grid gap-4 sm:grid-cols-2">
+    <label class="flex flex-col gap-1.5 text-sm">
+      <span class="font-medium">Name</span>
+      <input
+        type="text"
+        name="name"
+        required
+        autocomplete="name"
+        class="form-input"
+      />
+    </label>
+    <label class="flex flex-col gap-1.5 text-sm">
+      <span class="font-medium">Email</span>
+      <input
+        type="email"
+        name="email"
+        required
+        autocomplete="email"
+        class="form-input"
+      />
+    </label>
+  </div>
+
+  <div class="grid gap-4 sm:grid-cols-2">
+    <label class="flex flex-col gap-1.5 text-sm">
+      <span class="font-medium">What are you after?</span>
+      <select name="session_type" class="form-input" required>
+        {sessionTypes.map((t) => <option value={t}>{t}</option>)}
+      </select>
+    </label>
+    {
+      !compact && (
+        <label class="flex flex-col gap-1.5 text-sm">
+          <span class="font-medium">
+            Preferred date <span class="text-ink-faint">(optional)</span>
+          </span>
+          <input type="date" name="event_date" class="form-input" />
+        </label>
+      )
+    }
+  </div>
+
+  <label class="flex flex-col gap-1.5 text-sm">
+    <span class="font-medium">Tell me about it</span>
+    <textarea
+      name="message"
+      rows={compact ? 3 : 5}
+      required
+      class="form-input resize-y"
+      placeholder="A few lines about what you have in mind."></textarea>
+  </label>
+
+  <div class="cf-turnstile" data-sitekey={siteKey} data-theme="light"></div>
+
+  <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+    <button type="submit" class="form-submit bg-ink text-bone hover:bg-accent-deep px-8 py-4 text-sm font-medium transition-colors disabled:opacity-50">
+      Send inquiry
+    </button>
+    <p class="text-ink-faint text-sm">{site.responseTime}</p>
+  </div>
+
+  <p class="form-status text-sm" role="status" aria-live="polite"></p>
+
+  <noscript>
+    <p class="text-ink-soft text-sm">
+      This form needs JavaScript. You can also email me directly at
+      <a href={`mailto:${site.email}`} class="underline">{site.email}</a>.
+    </p>
+  </noscript>
+</form>
+
+<style>
+  .form-input {
+    background: var(--color-bone);
+    border: 1px solid var(--color-line);
+    padding: 0.7rem 0.85rem;
+    font-size: 0.95rem;
+    color: var(--color-ink);
+    transition: border-color 0.2s;
+  }
+  .form-input:focus {
+    outline: none;
+    border-color: var(--color-accent);
+  }
+  .form-input[aria-invalid="true"] {
+    border-color: #b4432f;
+  }
+</style>
+
+<script
+  is:inline
+  async
+  defer
+  src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>
+
+<script>
+  import { initContactForm } from "../../lib/contact-form";
+  document.addEventListener("astro:page-load", initContactForm);
+</script>

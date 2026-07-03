@@ -1,0 +1,138 @@
+---
+import Container from "../ui/Container.astro";
+import Button from "../ui/Button.astro";
+import { site } from "../../config/site";
+
+interface Props {
+  /** Home page starts transparent over the hero; inner pages start solid. */
+  overHero?: boolean;
+}
+const { overHero = false } = Astro.props;
+
+const links = [
+  { href: "/galleries/portraits", label: "Portraits" },
+  { href: "/galleries/travel", label: "Travel" },
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
+];
+---
+
+<header
+  id="site-nav"
+  data-over-hero={overHero ? "true" : "false"}
+  class:list={[
+    "fixed inset-x-0 top-0 z-50 transition-colors duration-300",
+    overHero ? "is-transparent" : "is-solid",
+  ]}
+>
+  <Container class="flex h-16 items-center justify-between md:h-20">
+    <a href="/" class="nav-brand font-display text-lg tracking-tight">
+      {site.brand}
+    </a>
+
+    <nav class="hidden items-center gap-8 md:flex" aria-label="Primary">
+      {
+        links.map((l) => (
+          <a href={l.href} class="nav-link text-sm tracking-wide transition-colors">
+            {l.label}
+          </a>
+        ))
+      }
+      <Button href="/contact" size="md">{site.primaryCta}</Button>
+    </nav>
+
+    <button
+      type="button"
+      id="menu-toggle"
+      class="nav-link md:hidden"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+    >
+      <span class="sr-only">Toggle menu</span>
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+        <path d="M3 6h18M3 12h18M3 18h18" />
+      </svg>
+    </button>
+  </Container>
+
+  <!-- Mobile menu -->
+  <div
+    id="mobile-menu"
+    hidden
+    class="bg-bone border-line border-t md:hidden"
+  >
+    <nav class="flex flex-col px-6 py-4" aria-label="Mobile">
+      {
+        links.map((l) => (
+          <a href={l.href} class="text-ink border-line/60 border-b py-3 text-base last:border-0">
+            {l.label}
+          </a>
+        ))
+      }
+      <a href="/contact" class="bg-ink text-bone mt-3 py-3 text-center text-sm">
+        {site.primaryCta}
+      </a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  #site-nav.is-transparent {
+    background: transparent;
+  }
+  #site-nav.is-transparent .nav-brand,
+  #site-nav.is-transparent .nav-link {
+    color: var(--color-bone);
+  }
+  #site-nav.is-solid {
+    background: color-mix(in srgb, var(--color-bone) 88%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--color-line);
+  }
+  #site-nav.is-solid .nav-brand,
+  #site-nav.is-solid .nav-link {
+    color: var(--color-ink);
+  }
+  .nav-link:hover {
+    color: var(--color-accent);
+  }
+</style>
+
+<script>
+  function initNav() {
+    const nav = document.getElementById("site-nav");
+    if (!nav) return;
+    const overHero = nav.dataset.overHero === "true";
+
+    const onScroll = () => {
+      if (!overHero) return; // inner pages stay solid
+      const scrolled = window.scrollY > 40;
+      nav.classList.toggle("is-solid", scrolled);
+      nav.classList.toggle("is-transparent", !scrolled);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    const toggle = document.getElementById("menu-toggle");
+    const menu = document.getElementById("mobile-menu");
+    if (toggle && menu) {
+      toggle.addEventListener("click", () => {
+        const open = menu.hasAttribute("hidden");
+        if (open) {
+          menu.removeAttribute("hidden");
+          nav.classList.add("is-solid");
+          nav.classList.remove("is-transparent");
+        } else {
+          menu.setAttribute("hidden", "");
+          if (overHero && window.scrollY <= 40) {
+            nav.classList.remove("is-solid");
+            nav.classList.add("is-transparent");
+          }
+        }
+        toggle.setAttribute("aria-expanded", String(open));
+      });
+    }
+  }
+
+  document.addEventListener("astro:page-load", initNav);
+</script>

@@ -1,0 +1,58 @@
+---
+import Container from "../ui/Container.astro";
+import { site } from "../../config/site";
+
+const year = new Date().getFullYear();
+const links = [
+  { href: "/galleries/portraits", label: "Portraits" },
+  { href: "/galleries/travel", label: "Travel" },
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
+];
+---
+
+<footer class="bg-ink text-bone mt-[var(--spacing-section)]">
+  <Container class="grid gap-10 py-16 md:grid-cols-3">
+    <div class="md:col-span-1">
+      <p class="font-display text-2xl">{site.brand}</p>
+      <p class="text-bone/60 mt-3 max-w-xs text-sm leading-relaxed">
+        {site.tagline}
+      </p>
+      <p class="text-bone/50 mt-4 text-sm">{site.serviceArea}</p>
+    </div>
+
+    <nav class="flex flex-col gap-3" aria-label="Footer">
+      {
+        links.map((l) => (
+          <a href={l.href} class="text-bone/75 hover:text-bone w-fit text-sm transition-colors">
+            {l.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="flex flex-col gap-3">
+      <a href={`mailto:${site.email}`} class="text-bone/75 hover:text-bone w-fit text-sm transition-colors">
+        {site.email}
+      </a>
+      {
+        site.social.instagram && (
+          <a
+            href={site.social.instagram}
+            class="text-bone/75 hover:text-bone w-fit text-sm transition-colors"
+            rel="me noopener"
+            target="_blank"
+          >
+            Instagram
+          </a>
+        )
+      }
+      <p class="text-bone/50 mt-2 text-sm">{site.responseTime}</p>
+    </div>
+  </Container>
+
+  <Container class="border-bone/10 flex flex-col gap-2 border-t py-6 text-xs text-bone/40 sm:flex-row sm:justify-between">
+    <p>© {year} {site.brand}. All rights reserved.</p>
+    <p>Photographs are placeholders — replace before launch.</p>
+  </Container>
+</footer>

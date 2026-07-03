@@ -1,14 +1,25 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import Nav from "../components/layout/Nav.astro";
+import Footer from "../components/layout/Footer.astro";
+import Hero from "../components/sections/Hero.astro";
+import FeaturedWork from "../components/sections/FeaturedWork.astro";
+import Testimonials from "../components/sections/Testimonials.astro";
+import Packages from "../components/sections/Packages.astro";
+import HowItWorks from "../components/sections/HowItWorks.astro";
+import InquiryCta from "../components/sections/InquiryCta.astro";
+import { site } from "../config/site";
 ---
 
-<BaseLayout title="Alex Lane Photography">
-  <section class="mx-auto max-w-3xl px-6 py-40 text-center">
-    <p class="text-ink-faint text-sm tracking-[0.2em] uppercase">Scaffold</p>
-    <h1 class="mt-4 text-hero">Foundation ready.</h1>
-    <p class="text-ink-soft mx-auto mt-6 max-w-md text-lg">
-      Design tokens, fonts, and the base layout are wired up. The conversion
-      spine lands next.
-    </p>
-  </section>
+<BaseLayout title={site.brand} description={site.positioning}>
+  <Nav slot="header" overHero />
+
+  <Hero />
+  <FeaturedWork />
+  <Testimonials />
+  <Packages />
+  <HowItWorks />
+  <InquiryCta />
+
+  <Footer slot="footer" />
 </BaseLayout>
