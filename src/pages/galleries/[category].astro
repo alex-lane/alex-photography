@@ -1,0 +1,46 @@
+---
+import type { GetStaticPaths } from "astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Nav from "../../components/layout/Nav.astro";
+import Footer from "../../components/layout/Footer.astro";
+import Container from "../../components/ui/Container.astro";
+import SectionHeading from "../../components/ui/SectionHeading.astro";
+import Button from "../../components/ui/Button.astro";
+import MasonryGallery from "../../components/gallery/MasonryGallery.astro";
+import { getGalleries } from "../../lib/content";
+
+export const getStaticPaths = (async () => {
+  const galleries = await getGalleries();
+  return galleries.map((g) => ({
+    params: { category: g.data.category },
+    props: { gallery: g },
+  }));
+}) satisfies GetStaticPaths;
+
+const { gallery } = Astro.props;
+const { title, description, photos } = gallery.data;
+---
+
+<BaseLayout title={title} description={description ?? `${title} photography.`}>
+  <Nav slot="header" />
+
+  <Container class="pt-28 md:pt-36">
+    <SectionHeading kicker="Gallery" title={title} />
+    {description && <p class="text-ink-soft mt-4 max-w-xl text-lg">{description}</p>}
+  </Container>
+
+  <Container class="py-12 md:py-16">
+    {
+      photos.length > 0 ? (
+        <MasonryGallery photos={photos} />
+      ) : (
+        <div class="border-line border-t py-20 text-center">
+          <p class="text-ink-soft text-lg">New work coming soon.</p>
+          <Button href="/contact" class="mt-6">Book a session</Button>
+        </div>
+      )
+    }
+  </Container>
+
+  <Footer slot="footer" />
+</BaseLayout>

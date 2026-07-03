@@ -1,0 +1,33 @@
+---
+import type { ImageMetadata } from "astro";
+import ResponsiveImage from "./ResponsiveImage.astro";
+
+interface Props {
+  href: string;
+  title: string;
+  description?: string;
+  count: number;
+  cover: ImageMetadata;
+  coverAlt: string;
+}
+const { href, title, description, count, cover, coverAlt } = Astro.props;
+---
+
+<a href={href} class="group relative block overflow-hidden" data-reveal>
+  <ResponsiveImage
+    src={cover}
+    alt={coverAlt}
+    aspect="4 / 5"
+    sizes="(min-width: 768px) 50vw, 100vw"
+    widths={[500, 800, 1200]}
+    class="w-full transition-transform duration-700 ease-[var(--ease-out-soft)] group-hover:scale-[1.04]"
+  />
+  <div class="scrim pointer-events-none absolute inset-0"></div>
+  <div class="absolute inset-x-0 bottom-0 p-7">
+    <h2 class="text-bone font-display text-3xl">{title}</h2>
+    {description && <p class="text-bone/80 mt-1 max-w-sm text-sm">{description}</p>}
+    <p class="text-bone/70 mt-3 text-xs uppercase tracking-[0.18em]">
+      {count} photographs →
+    </p>
+  </div>
+</a>
